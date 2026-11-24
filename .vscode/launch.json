@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "SpringbootmoviecrudApplication",
+      "request": "launch",
+      "mainClass": "com.bmsce.springbootmoviecrud.SpringbootmoviecrudApplication",
+      "projectName": ""
+    },
+    {
+      "type": "java",
       "name": "PredefinedExceptionRunner",
       "request": "launch",
       "mainClass": "com.bmsce.PredefinedExceptionRunner",
