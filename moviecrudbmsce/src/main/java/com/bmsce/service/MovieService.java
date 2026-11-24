@@ -15,8 +15,8 @@ public class MovieService {
             new MovieValidationService();
 
     public void addMovie(Movie movie)
-            throws InvalidMovieException,
-                   DuplicateMovieException {
+            throws InvalidMovieException,DuplicateMovieException 
+            {
 
         validationService.validateMovie(movie);
 
