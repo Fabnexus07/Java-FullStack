@@ -3,6 +3,48 @@
   "configurations": [
     {
       "type": "java",
+      "name": "PredefinedExceptionRunner",
+      "request": "launch",
+      "mainClass": "com.bmsce.PredefinedExceptionRunner",
+      "projectName": "moviecrudbmsce"
+    },
+    {
+      "type": "java",
+      "name": "MovieRunner",
+      "request": "launch",
+      "mainClass": "com.bmsce.MovieRunner",
+      "projectName": "moviecrudbmsce"
+    },
+    {
+      "type": "java",
+      "name": "MovieLoggingRunner",
+      "request": "launch",
+      "mainClass": "com.bmsce.MovieLoggingRunner",
+      "projectName": "moviecrudbmsce"
+    },
+    {
+      "type": "java",
+      "name": "MovieExceptionRunner",
+      "request": "launch",
+      "mainClass": "com.bmsce.MovieExceptionRunner",
+      "projectName": "moviecrudbmsce"
+    },
+    {
+      "type": "java",
+      "name": "MovieCRUDRunner",
+      "request": "launch",
+      "mainClass": "com.bmsce.MovieCRUDRunner",
+      "projectName": "moviecrudbmsce"
+    },
+    {
+      "type": "java",
+      "name": "ExceptionRunner",
+      "request": "launch",
+      "mainClass": "com.bmsce.ExceptionRunner",
+      "projectName": "moviecrudbmsce"
+    },
+    {
+      "type": "java",
       "name": "App",
       "request": "launch",
       "mainClass": "com.bmsce.App",
