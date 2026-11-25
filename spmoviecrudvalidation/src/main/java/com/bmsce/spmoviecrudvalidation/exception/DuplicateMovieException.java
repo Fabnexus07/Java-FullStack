@@ -1,0 +1,9 @@
+package com.bmsce.spmoviecrudvalidation.exception;
+
+public class DuplicateMovieException extends Exception {
+
+    public DuplicateMovieException(String message) {
+
+        super(message);
+    }
+}
