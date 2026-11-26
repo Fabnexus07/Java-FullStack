@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "SpmoviecrudrepositoryApplication",
+      "request": "launch",
+      "mainClass": "com.bmsce.spmoviecrudrepository.SpmoviecrudrepositoryApplication",
+      "projectName": "spmoviecrudrepository"
+    },
+    {
+      "type": "java",
       "name": "SpmoviecrudvalidationApplication",
       "request": "launch",
       "mainClass": "com.bmsce.spmoviecrudvalidation.SpmoviecrudvalidationApplication",
