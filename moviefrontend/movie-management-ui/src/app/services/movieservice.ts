@@ -97,4 +97,25 @@ export class MovieService {
     return newMovie;
   }
 
+  // Update movie by ID
+  updateMovie(movieId: number, updatedMovie: Omit<MovieModel, 'movieId'>): boolean {
+
+    const index = this.movies.findIndex(
+      movie => movie.movieId === movieId
+    );
+
+    if (index === -1) {
+      return false;
+    }
+
+    this.movies[index] = {
+      movieId: movieId,
+      ...updatedMovie
+    };
+
+    this.movieSubject.next([...this.movies]);
+
+    return true;
+  }
+
 }
