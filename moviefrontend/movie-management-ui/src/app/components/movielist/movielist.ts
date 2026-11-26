@@ -1,9 +1,27 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { MovieModel } from '../../movie';
+import { MovieService } from '../../services/movieservice';
 
 @Component({
   selector: 'app-movielist',
   standalone: false,
-  styleUrl: './movielist.css',
   templateUrl: './movielist.html',
+  styleUrl: './movielist.css',
 })
-export class Movielist {}
+export class Movielist {
+
+  movies$: Observable<MovieModel[]>;
+
+  constructor(private movieService: MovieService) {
+
+    this.movies$ = this.movieService.getAllMovies();
+
+  }
+
+  deleteMovie(movieId: number): void {
+
+    this.movieService.deleteMovie(movieId);
+
+  }
+}
