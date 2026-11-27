@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder,FormGroup,Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { MovieService } from '../../services/movieservice';
+import { MovieService } from '../../services/movieservice-new';
 import { MovieModel } from '../../movie';
 
 
@@ -12,6 +12,7 @@ import { MovieModel } from '../../movie';
   templateUrl: './movie-update.html',
   styleUrl: './movie-update.css',
 })
+
 export class MovieUpdate implements OnInit{
 
   movieForm: FormGroup;
@@ -89,35 +90,34 @@ export class MovieUpdate implements OnInit{
 
     // Get existing movie from service
 
-    const movie: MovieModel | undefined =
-      Number.isInteger(this.movieId)
-        ? this.movieService.getMovieById(this.movieId)
-        : undefined;
+    const movie$ = Number.isInteger(this.movieId)
+      ? this.movieService.getMovieById(this.movieId)
+      : undefined;
 
-
-    if (!movie) {
-
+    if (!movie$) {
       this.movieNotFound = true;
-
       return;
-
     }
 
+    movie$.subscribe({
+      next: (movie) => {
+        if (!movie) {
+          this.movieNotFound = true;
+          return;
+        }
 
-    // Populate form with existing movie details
-
-    this.movieForm.patchValue({
-
-      movieName: movie.movieName,
-
-      director: movie.director,
-
-      genre: movie.genre,
-
-      rating: movie.rating,
-
-      releaseYear: movie.releaseYear
-
+        // Populate form with existing movie details
+        this.movieForm.patchValue({
+          movieName: movie.movieName,
+          director: movie.director,
+          genre: movie.genre,
+          rating: movie.rating,
+          releaseYear: movie.releaseYear
+        });
+      },
+      error: () => {
+        this.movieNotFound = true;
+      }
     });
 
   }
@@ -142,6 +142,8 @@ export class MovieUpdate implements OnInit{
       this.movieId,
 
       {
+
+        movieId: this.movieId,
 
         movieName: updatedDetails.movieName,
 

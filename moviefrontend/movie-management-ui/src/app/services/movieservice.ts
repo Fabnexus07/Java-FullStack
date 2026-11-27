@@ -7,6 +7,8 @@ import { MovieModel } from '../movie';
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class MovieService {
 
   // Initial dummy collection

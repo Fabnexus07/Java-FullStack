@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MovieModel } from '../../movie';
-import { MovieService } from '../../services/movieservice';
+import { MovieService } from '../../services/movieservice-new';
 
 @Component({
   selector: 'app-showmovie',
@@ -19,18 +19,15 @@ export class Showmovie {
   constructor(private movieService: MovieService) {}
 
   getMovieById(): void {
-
-    this.selectedMovie =
-      this.movieService.getMovieById(Number(this.movieId));
-
-    if (this.selectedMovie) {
-
-      this.message = '';
-
-    } else {
-
-      this.message = 'Movie Not Found';
-
-    }
+    this.movieService.getMovieById(Number(this.movieId)).subscribe({
+      next: (movie) => {
+        this.selectedMovie = movie;
+        this.message = movie ? '' : 'Movie Not Found';
+      },
+      error: () => {
+        this.selectedMovie = undefined;
+        this.message = 'Movie Not Found';
+      },
+    });
   }
 }

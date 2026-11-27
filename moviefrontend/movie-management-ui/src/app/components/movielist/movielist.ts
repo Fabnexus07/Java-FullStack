@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MovieModel } from '../../movie';
-import { MovieService } from '../../services/movieservice';
+import { MovieService } from '../../services/movieservice-new';
 
 @Component({
   selector: 'app-movielist',
