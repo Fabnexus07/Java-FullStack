@@ -20,8 +20,14 @@ export class Movielist {
   }
 
   deleteMovie(movieId: number): void {
-
-    this.movieService.deleteMovie(movieId);
-
+  this.movieService.deleteMovie(movieId).subscribe({
+    next: () => {
+      this.movies$ = this.movieService.getAllMovies();
+    },
+    error: (error) => {
+      console.error('Failed to delete movie:', error);
+      alert('Unable to delete movie. Check the backend and try again.');
+    },
+  });
   }
 }
