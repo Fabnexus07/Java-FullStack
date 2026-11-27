@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder,FormGroup,Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MovieService } from '../../services/movieservice-new';
 import { MovieModel } from '../../movie';
 
@@ -10,104 +9,43 @@ import { MovieModel } from '../../movie';
   selector: 'app-movie-update',
   standalone: false,
   templateUrl: './movie-update.html',
-  styleUrl: './movie-update.css',
+  styleUrls: ['./movie-update.css']
 })
 
-export class MovieUpdate implements OnInit{
-
-  movieForm: FormGroup;
-
-  movieId: number = 101;
-
-  movies$: Observable<MovieModel[]>;
-
-  hasMovieId: boolean = false;
-
-  movieNotFound: boolean = false;
-
+export class MovieUpdate implements OnInit {
+  movieId!: number;
+  movieForm!: FormGroup;
+  movieNotFound = false;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private movieService: MovieService
-  ) {
-    this.movies$ = this.movieService.getAllMovies();
 
+  ) { }
+
+
+  ngOnInit(): void {
     this.movieForm = this.fb.group({
-
-      movieName: [
-        '',
-        [Validators.required, Validators.minLength(2)]
-      ],
-
-      director: [
-        '',
-        Validators.required
-      ],
-
-      genre: [
-        '',
-        Validators.required
-      ],
-
-      rating: [
-        '',
-        [
-          Validators.required,
-          Validators.min(0),
-          Validators.max(10)
-        ]
-      ],
-
-      releaseYear: [
-        '',
-        [
-          Validators.required,
-          Validators.min(1888),
-          Validators.max(2100)
-        ]
-      ]
-
+      movieId: [{ value: null, disabled: true }],
+      movieName: ['', [Validators.required, Validators.minLength(2)]],
+      director: ['', Validators.required],
+      genre: ['', Validators.required],
+      rating: [null, [Validators.required, Validators.min(0), Validators.max(10)]],
+      releaseYear: [null, [Validators.required, Validators.min(1888), Validators.max(2100)]]
     });
+    this.movieId = Number(this.route.snapshot.paramMap.get('movieId'));
+    this.loadMovie();
 
   }
 
 
-  ngOnInit(): void {
-
-    // Read movieId from URL
-
-    const movieIdParam = this.route.snapshot.paramMap.get('movieId');
-
-    this.hasMovieId = movieIdParam !== null;
-
-    if (!this.hasMovieId) {
-      return;
-    }
-
-    this.movieId = Number(movieIdParam);
-
-    // Get existing movie from service
-
-    const movie$ = Number.isInteger(this.movieId)
-      ? this.movieService.getMovieById(this.movieId)
-      : undefined;
-
-    if (!movie$) {
-      this.movieNotFound = true;
-      return;
-    }
-
-    movie$.subscribe({
+  loadMovie(): void {
+    this.movieService.getMovieById(this.movieId).subscribe({
       next: (movie) => {
-        if (!movie) {
-          this.movieNotFound = true;
-          return;
-        }
-
-        // Populate form with existing movie details
         this.movieForm.patchValue({
+          movieId: movie.movieId,
           movieName: movie.movieName,
           director: movie.director,
           genre: movie.genre,
@@ -115,68 +53,42 @@ export class MovieUpdate implements OnInit{
           releaseYear: movie.releaseYear
         });
       },
-      error: () => {
+      error: (error) => {
+        console.error(error);
         this.movieNotFound = true;
       }
-    });
 
+    });
   }
 
-
   updateMovie(): void {
-
     if (this.movieForm.invalid) {
-
       this.movieForm.markAllAsTouched();
-
       return;
-
     }
 
+    const updatedMovie: MovieModel = {
+      movieId: this.movieId,
+      ...this.movieForm.getRawValue()
+    };
 
-    const updatedDetails = this.movieForm.value;
 
-
-    const status = this.movieService.updateMovie(
-
-      this.movieId,
-
-      {
-
-        movieId: this.movieId,
-
-        movieName: updatedDetails.movieName,
-
-        director: updatedDetails.director,
-
-        genre: updatedDetails.genre,
-
-        rating: Number(updatedDetails.rating),
-
-        releaseYear: Number(updatedDetails.releaseYear)
-
+    this.movieService.updateMovie(this.movieId, updatedMovie).subscribe({
+      next: (response) => {
+        alert('Movie updated successfully');
+        console.log(response);
+        this.router.navigate(['/movies']);
+      },
+      error: (error) => {
+        console.error(error);
+        alert('Unable to update movie');
       }
-
-    );
-
-
-    if (status) {
-
-      this.router.navigate(['/movies']);
-
-    } else {
-
-      this.movieNotFound = true;
-
-    }
-
+    });
   }
 
 
   cancel(): void {
-
     this.router.navigate(['/movies']);
-
   }
 
 }

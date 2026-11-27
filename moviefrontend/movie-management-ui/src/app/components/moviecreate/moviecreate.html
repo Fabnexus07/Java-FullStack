@@ -2,6 +2,27 @@
 
 <form [formGroup]="movieForm" (ngSubmit)="addMovie()">
 
+    <div>
+        <label>Movie ID:</label>
+            <input
+                type="number"
+                formControlName="movieId"
+                placeholder="Enter a unique Movie ID">
+
+        <div class="error"
+            *ngIf="movieForm.get('movieId')?.touched &&
+                    movieForm.get('movieId')?.hasError('required')">
+            Movie ID is required.
+        </div>
+
+        <div class="error"
+            *ngIf="movieForm.get('movieId')?.touched &&
+                    movieForm.get('movieId')?.hasError('min')">
+            Movie ID must be greater than 0.
+        </div>
+    </div>
+
+
     <!-- Movie Name -->
     <div>
         <label>Movie Name:</label>

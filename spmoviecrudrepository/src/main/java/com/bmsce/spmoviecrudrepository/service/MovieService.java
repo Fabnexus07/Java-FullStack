@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.bmsce.spmoviecrudrepository.entity.Movie;
 import com.bmsce.spmoviecrudrepository.repository.MovieRepository;
+import com.bmsce.spmoviecrudrepository.exception.DuplicateMovieException;
 import com.bmsce.spmoviecrudrepository.exception.MovieNotFoundException;
 
 @Service
@@ -19,7 +20,11 @@ public class MovieService {
     }
 
     // 1. ADD MOVIE
-    public Movie addMovie(Movie movie) {
+    public Movie addMovie(Movie movie) throws DuplicateMovieException {
+        if (movieRepository.existsById(movie.getMovieId())) {
+            throw new DuplicateMovieException(
+                    "Movie already exists with ID: " + movie.getMovieId());
+        }
 
         return movieRepository.save(movie);
     }

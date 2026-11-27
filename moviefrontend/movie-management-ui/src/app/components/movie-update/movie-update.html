@@ -1,17 +1,17 @@
 <h2>Update Movie</h2>
 
-<div *ngIf="!hasMovieId && !movieNotFound">
+<div *ngIf="!movieId && !movieNotFound">
     <h3>Select a movie to update</h3>
 
     <ul>
-        <li *ngFor="let movie of (movies$ | async)">
+        <li *ngFor="let movie of $any(this).movies">
             <a [routerLink]="['/movie-update', movie.movieId]">
                 {{ movie.movieName }} (ID: {{ movie.movieId }})
             </a>
         </li>
     </ul>
 
-    <p *ngIf="(movies$ | async)?.length === 0">
+    <p *ngIf="$any(this).movies?.length === 0">
         No Movies Found
     </p>
 </div>
@@ -28,7 +28,7 @@
 
 
 <form
-    *ngIf="hasMovieId && !movieNotFound"
+    *ngIf="movieId && !movieNotFound"
     [formGroup]="movieForm"
     (ngSubmit)="updateMovie()">
 

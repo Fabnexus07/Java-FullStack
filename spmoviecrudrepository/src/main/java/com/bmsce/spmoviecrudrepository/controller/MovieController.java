@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.bmsce.spmoviecrudrepository.entity.Movie;
+import com.bmsce.spmoviecrudrepository.exception.DuplicateMovieException;
 import com.bmsce.spmoviecrudrepository.exception.MovieNotFoundException;
 import com.bmsce.spmoviecrudrepository.service.MovieService;
 
+@CrossOrigin (origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/movies")
 public class MovieController {
@@ -39,7 +41,7 @@ public class MovieController {
 
     @PostMapping
     public ResponseEntity<Movie> addMovie(
-            @RequestBody Movie movie) {
+            @RequestBody Movie movie) throws DuplicateMovieException {
 
         Movie savedMovie = movieService.addMovie(movie);
 

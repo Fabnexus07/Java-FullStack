@@ -19,9 +19,10 @@ export class MovieCreate {
   constructor(
     private fb: FormBuilder,
     private movieService: MovieService,
-    private router: Router
+    private router: Router,
   ) {
     this.movieForm = this.fb.group({
+      movieId: ['', [Validators.required, Validators.min(1)]],
       movieName: ['', [Validators.required, Validators.minLength(2)]],
 
       director: ['', Validators.required],
@@ -40,7 +41,15 @@ export class MovieCreate {
       return;
     }
 
-    const movie: MovieModel = this.movieForm.value;
+    const values = this.movieForm.getRawValue();
+
+    const movie: MovieModel = {
+      ...values,
+      movieId: Number(values.movieId),
+      rating: Number(values.rating),
+      releaseYear: Number(values.releaseYear),
+    };
+
     this.movieService.addMovie(movie).subscribe({
       next: (response) => {
         alert('Movie Created Successfully');
@@ -48,9 +57,10 @@ export class MovieCreate {
         this.router.navigate(['/movies']);
       },
       error: (error) => {
-        console.log(error);
-        alert('Unable to create movie. Check the Movie ID or other details.');
-      }
+        console.error(error);
+        const message = typeof error.error === 'string' ? error.error : error.error?.message;
+        alert(message ?? 'Unable to create movie. Check the movie details and try again.');
+      },
     });
   }
 }
